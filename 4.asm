@@ -15,7 +15,7 @@ START:
     MOV AX,DATAS
     MOV DS,AX
     MOV CX, 3
-    MOV BX, OFFSET ANSWER3
+    MOV BX, OFFSET ANSWER1
     ;此处输入代码段代码
     
 scanf:
@@ -36,16 +36,13 @@ scanf:
     CMP AL, 5BH
     JC LETTER
 REST:
-	INC ANSWER3
+	INC ANSWER1
 	JMP scanf
     
        
 printf:
-    PUSH BX
-    SUB BX, CX
-    ADD BX, 1
-	MOV DL, [BX]
-	POP BX
+    MOV DI, CX
+	MOV DL, [BX+DI-1]
 	MOV AH, 2
 	INT 21H
 	LOOP printf
@@ -54,10 +51,11 @@ printf:
     INT 21H
 
 NUMBER:
-	INC ANSWER1
+	INC ANSWER3
 	JMP scanf
 LETTER:
 	INC ANSWER2
 	JMP scanf
 CODES ENDS
     END START
+
