@@ -2,6 +2,16 @@ DATAS SEGMENT
     ;此处输入数据段代码 
     STRING DB 'Please Input a Character!$'
 DATAS ENDS
+putchar MACRO C
+	MOV DL, C 
+	MOV AH, 2
+	INT 21H
+ENDM
+getchar MACRO N
+	MOV AH,N
+    INT 21H
+ENDM
+
 
 STACKS SEGMENT
     ;此处输入堆栈段代码
@@ -13,10 +23,9 @@ START:
     MOV AX,DATAS
     MOV DS,AX
     ;此处输入代码段代码
-    MOV AH, 07H
-    INT 21H
+    getchar 01H
     
-    CMP AL, 'A'
+    CMP AL, 'A' 
     JC NO
     CMP AL, 5BH
     JC UP
@@ -41,12 +50,12 @@ LO :
    AND AL, 0DFH 
    
 printf:
-   MOV DL, AL
-   MOV AH, 2
-   INT 21H
+   putchar AL
    JMP EXIT
    
    
 CODES ENDS
     END START
+
+
 
