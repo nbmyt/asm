@@ -1,10 +1,15 @@
 DATAS SEGMENT
     ;此处输入数据段代码
-    ANSWER1 DB '0'
-    ANSWER2 DB '0'
-    ANSWER3 DB '0'
+    ANSWER1 DB 0
+    ANSWER2 DB 0
+    ANSWER3 DB 0
+    CRLF   DB  0AH, 0DH,'$'
 DATAS ENDS
-
+NEWLINE MACRO
+	LEA DX, CRLF                                     
+    MOV AH, 09H
+    INT 21H	
+ENDM
 STACKS SEGMENT
     ;此处输入堆栈段代码
 STACKS ENDS
@@ -21,6 +26,7 @@ START:
 scanf:
 	MOV AH, 01H
     INT 21H
+   
     
     CMP AL, 0DH
     JZ printf
@@ -42,10 +48,11 @@ REST:
        
 printf:
     MOV DI, CX
-	MOV DL, [BX+DI-1]
-	MOV AH, 2
-	INT 21H
+	MOV AL, [BX+DI-1]
+	CALL BCX 
+	NEWLINE
 	LOOP printf
+	
 	    
     MOV AH,4CH
     INT 21H
@@ -56,6 +63,41 @@ NUMBER:
 LETTER:
 	INC ANSWER2
 	JMP scanf
+BCX PROC NEAR
+	PUSH AX
+	PUSH BX
+	PUSH CX
+	PUSH DX
+
+	AND AH,0
+	MOV BL,100
+	DIV BL
+	MOV CL,AH
+	ADD AL,30H
+	MOV DL,AL
+	MOV AH,02H
+	INT 21H
+	MOV AL,CL
+	MOV BL,10
+	AND AH,0
+	DIV BL
+	ADD AL,30H
+	MOV DL,AL
+	MOV CL,AH
+	MOV AH,02H
+	INT 21H
+	MOV AL,CL
+	ADD AL,30H
+	MOV DL,AL
+	MOV AH,02H
+	INT 21H
+	POP DX
+	POP CX
+	POP BX
+	POP AX
+	RET
+BCX ENDP
 CODES ENDS
     END START
+
 

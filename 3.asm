@@ -33,27 +33,22 @@ START:
     INT 21H
     
 	NEWLINE					 
-
     
     LEA DX, STRING2
     MOV AH, 0AH
     INT 21H
     
     NEWLINE
-
-    
+   
     MOV CL, [STRING1 + 1]
     CMP CL, [STRING2 + 1]
     JNZ no
-
-    
     
 compare:  
 	LEA BX, STRING1
 	MOV SI, CX  
     MOV AL, [BX + SI + 1]
-    LEA BX, STRING2
-    CMP AL, [BX + SI + 1]
+    CMP AL, [BX + SI + 103]
     JNZ no
     LOOP compare
     
@@ -71,3 +66,4 @@ no:
 	JMP printf
 CODES ENDS
     END START
+
